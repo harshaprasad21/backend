@@ -25,8 +25,8 @@ jobs:
 
       - name: SCP
         run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aws-key.pem
-        chmod 600 ~/.ssh/aws-key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aws-key.pem
+          chmod 600 ~/.ssh/aws-key.pem
 
       - name: Copy files using SSM and SCP
         run: |
