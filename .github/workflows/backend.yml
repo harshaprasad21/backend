@@ -30,8 +30,8 @@ jobs:
 
       - name: Copy files using SSM and SCP
         run: |
-        aws ssm start-session --target i-${{ secrets.SERVER_IP }} --document-name AWS-StartSSHSession
-        scp -i ~/.ssh/aws-key.pem -r * ec2-user@${{ secrets.SERVER_IP }}:/var/www/server
+          aws ssm start-session --target i-${{ secrets.SERVER_IP }} --document-name AWS-StartSSHSession
+          scp -i ~/.ssh/aws-key.pem -r * ec2-user@${{ secrets.SERVER_IP }}:/var/www/server
 
 
 
