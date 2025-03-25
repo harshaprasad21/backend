@@ -23,6 +23,15 @@ jobs:
           sudo apt-get update
           sudo npm install
 
+      - name: SCP
+        run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aws-key.pem
+        chmod 600 ~/.ssh/aws-key.pem
+
+      - name: Copy files using SSM and SCP
+        run: |
+        aws ssm start-session --target i-${{ secrets.SERVER_IP }} --document-name AWS-StartSSHSession
+        scp -i ~/.ssh/aws-key.pem -r * ec2-user@${{ secrets.SERVER_IP }}:/var/www/server
 
 
 
