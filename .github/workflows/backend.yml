@@ -23,19 +23,15 @@ jobs:
           sudo apt-get update
           sudo npm install
 
-      - name: Secure Copy Files via Bastion Host
+      - name: copy file via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
-            host: ${{ secrets.BASTION_HOST }}  # Public Bastion Host
+            host: ${{ secrets.SERVER_IP }}
             username: ${{ secrets.USER }}
+            port: ${{ secrets.PORT }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: 22
             source: "*"
-            target: "/var/www/server"
-            timeout: "120s"
-            proxy_host: ${{ secrets.SERVER_IP }}  # Private EC2
-            proxy_username: ${{ secrets.USER }}
-            proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
+            target: /var/www/server
 
 
       - name: Restart PM2 process
