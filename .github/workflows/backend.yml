@@ -32,7 +32,7 @@ jobs:
            port: ${{ secrets.PORT }}
            source: "*"
            target: "/var/www/web/dist"
-           timeout: 250
+           timeout: 120s
 
       - name: Restart PM2 process
         uses: appleboy/ssh-action@v0.1.7    
