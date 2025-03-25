@@ -29,6 +29,7 @@ jobs:
            host: ${{ secrets.SERVER_IP }}
            username: ${{ secrets.USER }}
            key: ${{ secrets.SSH_PRIVATE_KEY }}
+           port: ${{ secrets.PORT }}
            source: "*"
            target: "/var/www/web/dist"
 
@@ -38,6 +39,7 @@ jobs:
             host: ${{ secrets.SERVER_IP }}
             username: ${{ secrets.USER }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.PORT }}
             script: |
                   cd /var/www/server
                   pm2 restart all
