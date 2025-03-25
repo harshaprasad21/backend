@@ -39,7 +39,8 @@ jobs:
             username: ${{ secrets.USER }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-                  cd /var/www/server 
+                  cd /var/www/server
                   pm2 restart all
+
             
         
