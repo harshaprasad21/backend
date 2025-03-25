@@ -25,6 +25,7 @@ jobs:
 
       - name: SCP
         run: |
+          touch ~/.ssh/aws-key.pem
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/aws-key.pem
           chmod 600 ~/.ssh/aws-key.pem
 
