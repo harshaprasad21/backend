@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - production
+      - main 
 
 jobs:
   deploy:
@@ -39,7 +39,7 @@ jobs:
             username: ${{ secrets.USER }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-                  cd /var/www/x-factor/x-Factor-backend
+                  cd /var/www/server 
                   pm2 restart all
             
         
