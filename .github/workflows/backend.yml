@@ -72,6 +72,9 @@ jobs:
           proxy_key: ${{ secrets.PRIVATE_KEY }}
           script: |
             cd /var/www/server
+            sudo pm2 start server.js 
+            sudo pm2 startup 
+            sudo pm2 save 
             sudo pm2 restart all 
 
             
