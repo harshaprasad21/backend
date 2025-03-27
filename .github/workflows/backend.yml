@@ -23,29 +23,56 @@ jobs:
           sudo apt-get update
           sudo npm install
 
-      - name: SCP
+      - name: Set Up SSH Key for Bastion Host
         run: |
-          touch /home/runner/work/backend/backend/.ssh/aws-key.pem
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/work/backend/backend/.ssh/aws-key.pem
-          chmod 600 /home/runner/work/backend/backend/.ssh/aws-key.pem
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/bastion_key
+          chmod 600 ~/.ssh/bastion_key
 
-      - name: Copy files using SSM and SCP
+      - name: Set Up SSH Key for Private Instance
         run: |
-          aws ssm start-session --target i-${{ secrets.SERVER_IP }} --document-name AWS-StartSSHSession
-          scp -i ~/.ssh/aws-key.pem -r * ec2-user@${{ secrets.SERVER_IP }}:/var/www/server
+          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/private_instance_key
+          chmod 600 ~/.ssh/private_instance_key
 
+      - name: Configure SSH for Bastion Proxy
+        run: |
+          echo "
+          Host bastion
+            HostName ${{ secrets.BASTION_HOST }}
+            User ${{ secrets.USER }}
+            IdentityFile ~/.ssh/bastion_key
+          Host private-instance
+            HostName ${{ secrets.PRIVATE_INSTANCE_HOST }}
+            User ${{ secrets.USER }}
+            IdentityFile ~/.ssh/private_instance_key
+            ProxyJump bastion
+          " > ~/.ssh/config
+          chmod 600 ~/.ssh/config
 
-
-      - name: Restart PM2 process
-        uses: appleboy/ssh-action@v0.1.7    
+      - name: Copy Files via SCP through Bastion Host
+        uses: appleboy/scp-action@master
         with:
-            host: ${{ secrets.SERVER_IP }}
-            username: ${{ secrets.USER }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: ${{ secrets.PORT }}
-            script: |
-                  cd /var/www/server
-                  pm2 restart all
+          host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          proxy_host: ${{ secrets.BASTION_HOST }}
+          proxy_username: ${{ secrets.USER }}
+          proxy_key: ${{ secrets.PRIVATE_KEY }}
+          source: "."
+          target: "/var/www/server"
+
+      - name: Restart Application on Private Instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          proxy_host: ${{ secrets.BASTION_HOST }}
+          proxy_username: ${{ secrets.USER }}
+          proxy_key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            cd /var/www/server
+            sudo pm2 restart all 
 
             
         
