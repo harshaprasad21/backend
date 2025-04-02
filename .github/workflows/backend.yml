@@ -26,7 +26,6 @@ jobs:
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
-<<<<<<< HEAD
           host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
@@ -53,12 +52,3 @@ jobs:
             pm2 restart all 
             
             
-=======
-           host: ${{ secrets.SERVER_IP }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_PRIVATE_KEY }}
-           source: "."
-           target: "/var/www/web"
-            
-        
->>>>>>> 35c3ec3994ab32fcf537ed84759a2a8418261061
