@@ -23,35 +23,10 @@ jobs:
           sudo apt-get update
           sudo npm install
 
-      - name: Set Up SSH Key for Bastion Host
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/bastion_key
-          chmod 600 ~/.ssh/bastion_key
-
-      - name: Set Up SSH Key for Private Instance
-        run: |
-          echo "${{ secrets.PRIVATE_KEY }}" > ~/.ssh/private_instance_key
-          chmod 600 ~/.ssh/private_instance_key
-
-      - name: Configure SSH for Bastion Proxy
-        run: |
-          echo "
-          Host bastion
-            HostName ${{ secrets.BASTION_HOST }}
-            User ${{ secrets.USER }}
-            IdentityFile ~/.ssh/bastion_key
-          Host private-instance
-            HostName ${{ secrets.PRIVATE_INSTANCE_HOST }}
-            User ${{ secrets.USER }}
-            IdentityFile ~/.ssh/private_instance_key
-            ProxyJump bastion
-          " > ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-      - name: Copy Files via SCP through Bastion Host
-        uses: appleboy/scp-action@master
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
         with:
+<<<<<<< HEAD
           host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.PRIVATE_KEY }}
@@ -78,3 +53,12 @@ jobs:
             pm2 restart all 
             
             
+=======
+           host: ${{ secrets.SERVER_IP }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_PRIVATE_KEY }}
+           source: "."
+           target: "/var/www/web"
+            
+        
+>>>>>>> 35c3ec3994ab32fcf537ed84759a2a8418261061
