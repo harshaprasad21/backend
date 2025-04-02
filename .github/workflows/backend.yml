@@ -30,8 +30,8 @@ jobs:
            username: ${{ secrets.USER }}
            key: ${{ secrets.SSH_PRIVATE_KEY }}
            source: "./"
-           target: "/var/www/sever"
-           
+           target: "/var/www/server"
+
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
