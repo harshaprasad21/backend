@@ -40,10 +40,10 @@ jobs:
            key: ${{ secrets.SSH_PRIVATE_KEY }}
            script: |
             cd /var/www/server
-            sudo pm2 start server.js 
-            sudo pm2 startup 
-            sudo pm2 save 
-            sudo pm2 restart all 
+             pm2 start server.js 
+             pm2 startup 
+             pm2 save 
+             pm2 restart all 
           
           
             
