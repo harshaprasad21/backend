@@ -26,25 +26,19 @@ jobs:
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          proxy_host: ${{ secrets.BASTION_HOST }}
-          proxy_username: ${{ secrets.USER }}
-          proxy_key: ${{ secrets.PRIVATE_KEY }}
-          source: "."
-          target: "/var/www/server"
-
-      - name: Restart Application on Private Instance
-        uses: appleboy/ssh-action@master
+           host: ${{ secrets.SERVER_IP }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_PRIVATE_KEY }}
+           source: "./"
+           target: "/var/www/sever"
+           
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.PRIVATE_INSTANCE_HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          proxy_host: ${{ secrets.BASTION_HOST }}
-          proxy_username: ${{ secrets.USER }}
-          proxy_key: ${{ secrets.PRIVATE_KEY }}
-          script: |
+           host: ${{ secrets.SERVER_IP }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_PRIVATE_KEY }}
+           script: |
             cd /var/www/server
             pm2 start server.js 
             pm2 startup 
