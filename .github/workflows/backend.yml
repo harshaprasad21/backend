@@ -32,8 +32,8 @@ jobs:
            source: "./"
            target: "/var/www/server"
 
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@v0.1.7
+      - name: Restart Application on Private Instance
+        uses: appleboy/ssh-action@master
         with:
            host: ${{ secrets.SERVER_IP }}
            username: ${{ secrets.USER }}
